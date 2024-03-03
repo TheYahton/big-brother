@@ -1,3 +1,5 @@
 __pycache__
 .venv
 discord.log
+data/channels_creators.json
+data/channels.json
