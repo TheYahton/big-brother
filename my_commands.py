@@ -27,15 +27,15 @@ class MyCog(commands.Cog):
         if before and before.channel:
             if (
                 not before.channel.members
-                and before.channel.category.id == TEMPORARY_CHANNELS_CATEGORY_ID
+                and before.channel.category.id == config.TEMPORARY_CHANNELS_CATEGORY_ID
             ):
                 await before.channel.delete()
 
         if after:
-            if after.channel.id == CREATE_TEMPORARY_CHANNEL_ID:
+            if after.channel.id == config.CREATE_TEMPORARY_CHANNEL_ID:
                 guild = after.channel.guild
                 category = discord.utils.get(
-                    guild.categories, id=TEMPORARY_CHANNELS_CATEGORY_ID
+                    guild.categories, id=config.TEMPORARY_CHANNELS_CATEGORY_ID
                 )
                 channel = await guild.create_voice_channel(
                     f"канал {member.display_name}", category=category
