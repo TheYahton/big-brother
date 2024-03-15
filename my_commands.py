@@ -38,32 +38,17 @@ class General(commands.Cog):
 class VoiceMaster(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.channel_creators = {}
         self.temporary_channels = []
         self.data_load()
-        print(self.channel_creators)
     
     def data_load(self):
-        if os.path.exists('data/channels_creators.json'):
-            with open("data/channels_creators.json", 'r') as data:
-                self.channel_creators = json.load(data)
         if os.path.exists('data/channels.json'):
             with open("data/channels.json", 'r') as data:
                 self.temporary_channels = json.load(data)
     
     def data_save(self):
-        with open("data/channels_creators.json", "w") as outfile:
-            json.dump(self.channel_creators, outfile)
         with open("data/channels.json", "w") as outfile:
             json.dump(self.temporary_channels, outfile)
-
-    @app_commands.command(description="Создать канал-творец")
-    @commands.has_permissions(administrator = True)
-    async def setup(self, interaction: discord.Interaction):
-        self.channel_creators.update({interaction.guild.id: (await interaction.guild.create_voice_channel("Создать приватку SB")).id})
-        await interaction.response.send_message("Канал-творец создан!")
-        self.data_save()
-        
 
     @commands.Cog.listener()
     async def on_voice_state_update(self, member: discord.Member, before: discord.VoiceState, after: discord.VoiceState):
@@ -77,9 +62,9 @@ class VoiceMaster(commands.Cog):
                 self.data_save()
 
         if after.channel:
-            if after.channel.id == self.channel_creators.get(str(after.channel.guild.id), -1):
+            if after.channel.id == config.CHANNEL_CREATOR_ID:
                 guild: discord.Guild = after.channel.guild
-                category = discord.utils.get(after.channel.guild.channels, id=self.channel_creators.get(str(after.channel.guild.id), 0))
+                category = discord.utils.get(after.channel.guild.channels, id=config.CHANNEL_CREATOR_ID)
                 channel = await guild.create_voice_channel(
                     f"канал {member.display_name}", category=category.category if category else None
                 )
