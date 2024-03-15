@@ -11,6 +11,7 @@ import os
 class General(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.logs_channel: discord.TextChannel = bot.get_channel(config.CHANNEL_LOGS_ID)
 
     @app_commands.command(description="Задать вопрос Gigachat")
     @app_commands.describe(request="Ваш запрос тут")
@@ -27,12 +28,36 @@ class General(commands.Cog):
         else:
             await interaction.response.send_message("Создатель бота жмот, который не удосужился дать мне API ключ :/")
     
-
-
     @commands.Cog.listener()
-    async def on_message(self, message):
+    async def on_message(self, message: discord.Message) -> None:
         if message.author.id == self.bot.user.id:
             return
+        if message.channel.id == config.CHANNEL_LOGS_ID:
+            return
+        
+        embed = discord.Embed(description=f"{message.content}", color=discord.Color.dark_green(), url=message.jump_url, title=message.channel.name)
+        embed.set_author(name=message.author.name, icon_url=message.author.avatar)
+        await self.logs_channel.send(embed=embed)
+    
+    @commands.Cog.listener()
+    async def on_message_edit(self, message_before: discord.Message, message_after: discord.Message) -> None:
+        if message.author.id == self.bot.user.id:
+            return
+        if message.channel.id == config.CHANNEL_LOGS_ID:
+            return
+
+        await self.logs_channel.send(f"{message_before.author} edited from: {message_before.content}\nto: {message_after.content}")
+
+    @commands.Cog.listener()
+    async def on_message_delete(self, message: discord.Message) -> None:
+        if message.author.id == self.bot.user.id:
+            return
+        if message.channel.id == config.CHANNEL_LOGS_ID:
+            return
+
+        embed = discord.Embed(description=f"{message.content}", color=discord.Color.red(), url=message.jump_url, title=message.channel.name)
+        embed.set_author(name=message.author.name, icon_url=message.author.avatar)
+        await self.logs_channel.send(embed=embed)
 
 
 class VoiceMaster(commands.Cog):
