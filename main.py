@@ -1,7 +1,7 @@
 import logging
 import discord
 from discord.ext import commands
-from config import TOKEN
+from config import TOKEN, IS_DEBUG
 import my_commands
 
 
@@ -26,4 +26,4 @@ class Bot(commands.Bot):
 
 if __name__ == "__main__":
     bot = Bot()
-    bot.run(TOKEN, log_handler=Bot.handler, log_level=logging.DEBUG)
+    bot.run(TOKEN, log_handler=Bot.handler, log_level=logging.DEBUG if IS_DEBUG else logging.INFO)
