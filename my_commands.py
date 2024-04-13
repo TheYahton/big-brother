@@ -51,7 +51,6 @@ class General(commands.Cog):
         embed.set_author(name=message_after.author.name, icon_url=message_after.author.avatar)
         embed.set_footer(text="#edited")
         await self.logs_channel.send(embed=embed)
-        # await self.logs_channel.send(f"{message_before.author} edited from: {message_before.content}\nto: {message_after.content}")
 
     @commands.Cog.listener()
     async def on_message_delete(self, message: discord.Message) -> None:
