@@ -41,12 +41,15 @@ class General(commands.Cog):
     
     @commands.Cog.listener()
     async def on_message_edit(self, message_before: discord.Message, message_after: discord.Message) -> None:
-        if message.author.id == self.bot.user.id:
+        if message_after.author.id == self.bot.user.id:
             return
-        if message.channel.id == config.CHANNEL_LOGS_ID:
+        if message_after.channel.id == config.CHANNEL_LOGS_ID:
             return
 
-        await self.logs_channel.send(f"{message_before.author} edited from: {message_before.content}\nto: {message_after.content}")
+        embed = discord.Embed(description=f"{message_before.content}\nTo:\n{message_after.content}", color=discord.Color.yellow(), url=message_after.jump_url, title=message_after.channel.name)
+        embed.set_author(name=message_after.author.name, icon_url=message_after.author.avatar)
+        await self.logs_channel.send(embed=embed)
+        # await self.logs_channel.send(f"{message_before.author} edited from: {message_before.content}\nto: {message_after.content}")
 
     @commands.Cog.listener()
     async def on_message_delete(self, message: discord.Message) -> None:
