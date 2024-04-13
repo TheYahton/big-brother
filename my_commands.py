@@ -37,6 +37,7 @@ class General(commands.Cog):
         
         embed = discord.Embed(description=f"{message.content}", color=discord.Color.dark_green(), url=message.jump_url, title=message.channel.name)
         embed.set_author(name=message.author.name, icon_url=message.author.avatar)
+        embed.set_footer(text="#sent")
         await self.logs_channel.send(embed=embed)
     
     @commands.Cog.listener()
@@ -48,6 +49,7 @@ class General(commands.Cog):
 
         embed = discord.Embed(description=f"{message_before.content}\nTo:\n{message_after.content}", color=discord.Color.yellow(), url=message_after.jump_url, title=message_after.channel.name)
         embed.set_author(name=message_after.author.name, icon_url=message_after.author.avatar)
+        embed.set_footer(text="#edited")
         await self.logs_channel.send(embed=embed)
         # await self.logs_channel.send(f"{message_before.author} edited from: {message_before.content}\nto: {message_after.content}")
 
@@ -60,6 +62,7 @@ class General(commands.Cog):
 
         embed = discord.Embed(description=f"{message.content}", color=discord.Color.red(), url=message.jump_url, title=message.channel.name)
         embed.set_author(name=message.author.name, icon_url=message.author.avatar)
+        embed.set_footer(text="#deleted")
         await self.logs_channel.send(embed=embed)
 
 
