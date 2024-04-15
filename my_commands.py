@@ -30,7 +30,7 @@ class General(commands.Cog):
     
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message) -> None:
-        if message.author.id == self.bot.user.id:
+        if message.author.bot:
             return
         if message.channel.id == config.CHANNEL_LOGS_ID:
             return
@@ -42,7 +42,7 @@ class General(commands.Cog):
     
     @commands.Cog.listener()
     async def on_message_edit(self, message_before: discord.Message, message_after: discord.Message) -> None:
-        if message_after.author.id == self.bot.user.id:
+        if message_after.bot:
             return
         if message_after.channel.id == config.CHANNEL_LOGS_ID:
             return
@@ -54,7 +54,7 @@ class General(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message_delete(self, message: discord.Message) -> None:
-        if message.author.id == self.bot.user.id:
+        if message.author.bot:
             return
         if message.channel.id == config.CHANNEL_LOGS_ID:
             return
