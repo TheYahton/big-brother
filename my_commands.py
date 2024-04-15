@@ -42,7 +42,7 @@ class General(commands.Cog):
     
     @commands.Cog.listener()
     async def on_message_edit(self, message_before: discord.Message, message_after: discord.Message) -> None:
-        if message_after.bot:
+        if message_after.author.bot:
             return
         if message_after.channel.id == config.CHANNEL_LOGS_ID:
             return
