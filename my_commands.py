@@ -35,7 +35,7 @@ class General(commands.Cog):
         if message.channel.id == config.CHANNEL_LOGS_ID:
             return
         
-        embed = discord.Embed(description=f"{message.content}", color=discord.Color.dark_green(), url=message.jump_url, title=message.channel.name)
+        embed = discord.Embed(description=f"{message.content}{''.join([attachment.url for attachment in message.attachments])}", color=discord.Color.dark_green(), url=message.jump_url, title=message.channel.name)
         embed.set_author(name=message.author.name, icon_url=message.author.avatar)
         embed.set_footer(text="#sent")
         await self.logs_channel.send(embed=embed)
@@ -47,7 +47,9 @@ class General(commands.Cog):
         if message_after.channel.id == config.CHANNEL_LOGS_ID:
             return
 
-        embed = discord.Embed(description=f"{message_before.content}\nTo:\n{message_after.content}", color=discord.Color.yellow(), url=message_after.jump_url, title=message_after.channel.name)
+        description = f"{message_before.content}{''.join([attachment.url for attachment in message_before.attachments])}\
+            \nTo:\n{message_after.content}{''.join([attachment.url for attachment in message_after.attachments])}"
+        embed = discord.Embed(description=description, color=discord.Color.yellow(), url=message_after.jump_url, title=message_after.channel.name)
         embed.set_author(name=message_after.author.name, icon_url=message_after.author.avatar)
         embed.set_footer(text="#edited")
         await self.logs_channel.send(embed=embed)
@@ -59,7 +61,7 @@ class General(commands.Cog):
         if message.channel.id == config.CHANNEL_LOGS_ID:
             return
 
-        embed = discord.Embed(description=f"{message.content}", color=discord.Color.red(), url=message.jump_url, title=message.channel.name)
+        embed = discord.Embed(description=f"{message.content}{''.join([attachment.url for attachment in message.attachments])}", color=discord.Color.red(), url=message.jump_url, title=message.channel.name)
         embed.set_author(name=message.author.name, icon_url=message.author.avatar)
         embed.set_footer(text="#deleted")
         await self.logs_channel.send(embed=embed)
