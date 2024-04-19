@@ -8,6 +8,14 @@ import json
 import os
 
 
+def should_logged(message: discord.Message):
+        if message.author.bot:
+            return False
+        if message.channel.id == config.CHANNEL_LOGS_ID:
+            return False
+        return True
+
+
 class General(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -30,9 +38,7 @@ class General(commands.Cog):
     
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message) -> None:
-        if message.author.bot:
-            return
-        if message.channel.id == config.CHANNEL_LOGS_ID:
+        if not should_logged(message):
             return
         
         embed = discord.Embed(description=f"{message.content}{''.join([attachment.url for attachment in message.attachments])}", color=discord.Color.dark_green(), url=message.jump_url, title=message.channel.name)
@@ -42,9 +48,7 @@ class General(commands.Cog):
     
     @commands.Cog.listener()
     async def on_message_edit(self, message_before: discord.Message, message_after: discord.Message) -> None:
-        if message_after.author.bot:
-            return
-        if message_after.channel.id == config.CHANNEL_LOGS_ID:
+        if not should_logged(message_after):
             return
 
         description = f"{message_before.content}{''.join([attachment.url for attachment in message_before.attachments])}\
@@ -56,9 +60,7 @@ class General(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message_delete(self, message: discord.Message) -> None:
-        if message.author.bot:
-            return
-        if message.channel.id == config.CHANNEL_LOGS_ID:
+        if not should_logged(message):
             return
 
         embed = discord.Embed(description=f"{message.content}{''.join([attachment.url for attachment in message.attachments])}", color=discord.Color.red(), url=message.jump_url, title=message.channel.name)
