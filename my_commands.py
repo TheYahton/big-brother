@@ -37,16 +37,6 @@ class General(commands.Cog):
             await interaction.response.send_message("Создатель бота жмот, который не удосужился дать мне API ключ :/")
     
     @commands.Cog.listener()
-    async def on_message(self, message: discord.Message) -> None:
-        if not should_logged(message):
-            return
-        
-        embed = discord.Embed(description=f"{message.content}{''.join([attachment.url for attachment in message.attachments])}", color=discord.Color.dark_green(), url=message.jump_url, title=message.channel.name)
-        embed.set_author(name=message.author.name, icon_url=message.author.avatar)
-        embed.set_footer(text="#sent")
-        await self.logs_channel.send(embed=embed)
-    
-    @commands.Cog.listener()
     async def on_message_edit(self, message_before: discord.Message, message_after: discord.Message) -> None:
         if not should_logged(message_after):
             return
