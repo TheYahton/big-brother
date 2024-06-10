@@ -1,7 +1,6 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
-from gigachat import GigaChat
 
 import config
 import json
@@ -21,21 +20,6 @@ class General(commands.Cog):
         self.bot = bot
         self.logs_channel: discord.TextChannel = bot.get_channel(config.CHANNEL_LOGS_ID)
 
-    @app_commands.command(description="Задать вопрос Gigachat")
-    @app_commands.describe(request="Ваш запрос тут")
-    async def ai(self, interaction: discord.Interaction, request: str) -> None:
-        if config.GIGACHAT_TOKEN:
-            await interaction.response.send_message("Загрузка...")
-            with GigaChat(
-                credentials=config.GIGACHAT_TOKEN, verify_ssl_certs=False
-            ) as giga:
-                response = giga.chat(request)
-                await interaction.edit_original_response(
-                    content=response.choices[0].message.content
-                )
-        else:
-            await interaction.response.send_message("Создатель бота жмот, который не удосужился дать мне API ключ :/")
-    
     @commands.Cog.listener()
     async def on_message_edit(self, message_before: discord.Message, message_after: discord.Message) -> None:
         if not should_logged(message_after):
