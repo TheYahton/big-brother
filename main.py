@@ -2,8 +2,12 @@ import logging
 import discord
 from discord.ext import commands
 from config import TOKEN, LOG_DEBUG
-import my_commands
+from plugins.logger import Logger
+from plugins.voice import Voice
 
+async def setup(bot: commands.Bot) -> None:
+    await bot.add_cog(General(bot))
+    await bot.add_cog(VoiceMaster(bot))
 
 class Bot(commands.Bot):
     handler = logging.FileHandler(filename="discord.log", encoding="utf-8", mode="w")
@@ -15,8 +19,11 @@ class Bot(commands.Bot):
 
     async def on_ready(self) -> None:
         print(f"We have logged in as {self.user} | {self.user.id}")
-        await my_commands.setup(self)
-        print(f"The commands has been initialized")
+
+        await self.add_cog(Logger(self))
+        print(f"The logger plugin has been initialized.")
+        await self.add_cog(Voice(self))
+        print("The voice plugin has been initialized.")
 
         await self.tree.sync()
         print(f"Commands tree has been sync")
