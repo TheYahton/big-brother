@@ -46,7 +46,3 @@ class Voice(commands.Cog):
 
                 await channel.set_permissions(member, manage_channels=True, mute_members=True, move_members=True, manage_roles=True)
 
-async def setup(bot: commands.Bot) -> None:
-    await bot.add_cog(General(bot))
-    await bot.add_cog(VoiceMaster(bot))
-

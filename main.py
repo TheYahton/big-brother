@@ -4,6 +4,7 @@ from discord.ext import commands
 from config import TOKEN, LOG_DEBUG
 from plugins.logger import Logger
 from plugins.voice import Voice
+from plugins.llama import Ai
 
 async def setup(bot: commands.Bot) -> None:
     await bot.add_cog(General(bot))
@@ -24,6 +25,8 @@ class Bot(commands.Bot):
         print(f"The logger plugin has been initialized.")
         await self.add_cog(Voice(self))
         print("The voice plugin has been initialized.")
+        await self.add_cog(Ai())
+        print("The AI plugin has been initialized.")
 
         await self.tree.sync()
         print(f"Commands tree has been sync")
